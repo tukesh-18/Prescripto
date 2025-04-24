@@ -5,7 +5,7 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   base:"/",
   plugins: [
-    [react()],
+    react(),
     tailwindcss(),
   ],
   server:{port:5173}
