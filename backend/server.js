@@ -17,21 +17,39 @@ ConnectDB();
 ConnectCloudinary();
 const port = process.env.PORT || 4000
 
- //Middlewares
- app.use(express.json());
- app.use(cors())
+//Middlewares
+app.use(express.json());
 
- //api endpoint
- app.use("/api/admin", adminRouter)
- app.use("/api/doctor", doctorRouter)
- app.use("/api/user", UserRouter)
 
- app.get("/", (req, res)=>{
-    res.send("Your server is live and api working ")
- })
+const allowedOrigins = [
+   'https://prescripto-g65o.onrender.com',       // main user frontend
+   'https://prescripto-admin-2s75.onrender.com'  // admin dashboard
+];
 
- //listening on port 
+app.use(cors({
+   origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+         callback(null, true);
+      } else {
+         callback(new Error('Not allowed by CORS'));
+      }
+   },
+   credentials: true
+}));
 
- app.listen(port, () =>{
-    console.log(`server is stated on port no. ${port}`)
- })
+app.use(cors())
+
+//api endpoint
+app.use("/api/admin", adminRouter)
+app.use("/api/doctor", doctorRouter)
+app.use("/api/user", UserRouter)
+
+app.get("/", (req, res) => {
+   res.send("Your server is live and api working ")
+})
+
+//listening on port 
+
+app.listen(port, () => {
+   console.log(`server is stated on port no. ${port}`)
+})
